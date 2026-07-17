@@ -3,12 +3,7 @@ import matplotlib.pyplot as plt
 import math
 
 def lagrange_interpolation(x, y, xp):
-    """
-    Lagrange Interpolation Formula
-    x: array of x values
-    y: array of y values
-    xp: value to interpolate
-    """
+
     n = len(x)
     result = 0
     
