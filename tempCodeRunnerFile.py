@@ -1,59 +1,45 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def f(x):
-    return x**3 - 2*x - 5  # Root ≈ 2.0946
-
-def g(x):
-    # Rearrange f(x) = 0 to x = g(x)
-    # From x³ - 2x - 5 = 0
-    # x³ = 2x + 5
-    # x = (2x + 5)^(1/3)
-    return (2*x + 5)**(1/3)
-
-def fixed_point_iteration(g, a, esp_abs, max_iter):
-    print('Fixed-Point Iteration Results:')
-    print("Iter\t\t x\t\t g(x)\t\t |x - x_old|")
-    print("-" * 70)
-
-    iteration = 0
-    x_old = a
-
-    while iteration < max_iter:
-        x = g(x_old)
-
-        print(f"{iteration}\t\t {x:.6f}\t {g(x):.6f}\t {abs(x - x_old):.6f}") 
-
-        if abs(x - x_old) < esp_abs:
-            print(f"Converged after {iteration + 1} iterations.")
-            return x
-        
-        x_old = x
-        iteration += 1
+def cramers_rule(A, b):
+    n = len(b)
+    det_A = np.linalg.det(A)
     
-    print("Max iterations reached.")
+    if det_A == 0:
+        print("No unique solution")
+        return None
+    
+    x = np.zeros(n)
+    for i in range(n):
+        A_i = np.array(A, dtype=float)
+        A_i[:, i] = b
+        x[i] = np.linalg.det(A_i) / det_A
+    
     return x
 
-# Initial guess
-a = 2.0
-esp_abs = 0.001
-max_iter = 4
-root = fixed_point_iteration(g, a, esp_abs, max_iter)
+# Equations: x + y + z = 8500
+#            0.02x + 0.03y + 0.06z = 380
+#            x + y - z = 0
 
-print(f"\nRoot found: x = {root:.8f}")
-print(f"f(root) = {f(root):.6e}")
+A = [[1, 1, 1],
+     [0.02, 0.03, 0.06],
+     [1, 1, -1]]
 
-# Plot
-x = np.linspace(1, 5, 400)
-y = f(x)
+b = [8500, 380, 0]
 
-plt.plot(x, y, 'b-', linewidth=2, label='f(x)')
-plt.plot(root, f(root), 'ro', markersize=8, label=f'Root = {root:.5f}')
-plt.axhline(0, color='black', linewidth=0.8)
-plt.axvline(root, color='red', linestyle='--', linewidth=0.8)  
-plt.title('Fixed-Point Iteration Method: x³ - 2x - 5 = 0')
-plt.xlabel('x')
-plt.ylabel('f(x)')
-plt.grid(True)
-plt.legend()
-plt.show()
+# Solve
+x = cramers_rule(A, b)
+
+# Display results
+
+print("\nINVESTMENT SOLUTION")
+print("="*50)
+print(f"Amount at 2% (x) = {x[0]:.2f} taka")
+print(f"Amount at 3% (y) = {x[1]:.2f} taka")
+print(f"Amount at 6% (z) = {x[2]:.2f} taka")
+
+# Verification
+print("\nVERIFICATION")
+print("="*50)
+print(f"Total Investment: {x[0]+x[1]+x[2]:.2f} taka")
+print(f"Total Interest: {0.02*x[0] + 0.03*x[1] + 0.06*x[2]:.2f} taka")
+print(f"6% = Sum of others: {x[2]:.2f} = {x[0]:.2f} + {x[1]:.2f}")
