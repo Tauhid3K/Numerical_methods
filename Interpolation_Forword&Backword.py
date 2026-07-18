@@ -51,7 +51,7 @@ x = np.linspace(0, 4, 400)
 y_forward = [interp_forward(x_data, y_data, xi) for xi in x]
 
 # Plot
-plt.plot(x, y_forward, 'b-', linewidth=2, label='Forward Interpolation')
+plt.plot(x, y_forward, 'b-', linewidth=2, label='Interpolation')
 plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
 plt.plot(xp, forward_result, 'ro', markersize=10, label=f'Result = {forward_result:.4f}')
 

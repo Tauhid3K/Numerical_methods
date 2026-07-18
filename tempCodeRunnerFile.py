@@ -1,1 +1,9 @@
-j][k
+plt.plot(x, y_lagrange, 'g-', linewidth=2, label='Lagrange Interpolation')
+plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
+plt.plot(xp, lagrange_interpolation(x_data, y_data, xp), 'go', markersize=10, label=f'Result at x={xp}: {result:.4f}')
+plt.grid(True, alpha=0.3)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Lagrange Interpolation')
+plt.legend()
+plt.show()
