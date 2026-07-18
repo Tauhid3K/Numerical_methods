@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def simpson_13(f, a, b):
-    """Single segment Simpson's 1/3 rule"""
     h = (b - a) / 2
     return (h / 3) * (f(a) + 4*f((a+b)/2) + f(b))
 
