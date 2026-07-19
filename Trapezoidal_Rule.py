@@ -1,25 +1,45 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def trapezoidal(f, a, b):
-    return (b - a) / 2 * (f(a) + f(b)) 
+# -----------------------
+# Function
+# -----------------------
 
-# Example function
-def f(t):
-    return 200 * np.log(140000 / (140000 - 2100*t)) - 9.8*t
+def f(x):
+    return 0.2+25*x-200*x**2+675*x**3-900*x**4+400*x**5
 
-a, b = 8, 30
-result = trapezoidal(f, a, b)
+# Interval
+a = 0
+b = 0.8
 
-print(f"Trapezoidal Rule: {result:.6f}")
+# Trapezoidal Rule
+h = b - a
 
-# Plot
-t = np.linspace(a, b, 100)
-plt.plot(t, f(t), 'b-', linewidth=2)
-plt.fill_between([a, b], 0, [f(a), f(b)], alpha=0.3, color='green')
-plt.plot([a, b], [f(a), f(b)], 'ro', markersize=8)
-plt.xlabel('t')
-plt.ylabel('f(t)')
-plt.title('Trapezoidal Rule')
+result = (h/2) * (f(a) + f(b))
+
+print("Integral =", result)
+
+# -----------------------
+# Graph
+# -----------------------
+
+x = np.linspace(a, b, 100)
+y = f(x)
+
+plt.plot(x, y, label="f(x)")
+
+# Trapezoid
+plt.fill([a, a, b, b],
+         [0, f(a), f(b), 0],
+         alpha=0.6,
+         label="Trapezoid")
+
+plt.scatter([a, b], [f(a), f(b)], color="red")
+
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.title("Trapezoidal Rule")
 plt.grid(True)
+plt.legend()
+
 plt.show()
