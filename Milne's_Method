@@ -1,59 +1,74 @@
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
-# Differential Equation: dy/dx = x + y
+# -----------------------
+# Function
+# -----------------------
+
 def f(x, y):
-    return x + y
+    return 0.5*(x+y)
 
-# Step size
-h = 0.1
 
-# Initial 4 known points (from RK4 or given in the question)
-x = [0.0, 0.1, 0.2, 0.3]
-y = [1.0000, 1.1103, 1.2428, 1.3997]
 
-# Number of new points to calculate
-steps = 5
+# -----------------------
+# Given Data
+# -----------------------
 
-for i in range(steps):
+h = 0.5
 
-    n = len(x) - 1   # index of last known value
+x=[0,0.5,1,1.5]
+y=[2,2.636,3.595,4.968]
 
-    x0, y0 = x[n-3], y[n-3]
-    x1, y1 = x[n-2], y[n-2]
-    x2, y2 = x[n-1], y[n-1]
-    x3, y3 = x[n],   y[n]
+# -----------------------
+# Calculate Slopes
+# -----------------------
 
-    f0 = f(x0, y0)
-    f1 = f(x1, y1)
-    f2 = f(x2, y2)
-    f3 = f(x3, y3)
+f0 = f(x[0], y[0])
+f1 = f(x[1], y[1])
+f2 = f(x[2], y[2])
+f3 = f(x[3], y[3])
 
-    x4 = x3 + h   # next x value
+# -----------------------
+# Predictor
+# -----------------------
 
-    y4_guess = y0 + (4*h/3) * (2*f1 - f2 + 2*f3)
+x4 = x[3] + h
 
-    f4_guess = f(x4, y4_guess)
+y_pred = y[0] + (4*h/3) * (2*f1 - f2 + 2*f3)
 
-    y4_final = y2 + (h/3) * (f2 + 4*f3 + f4_guess)
+print("Predicted Value =", round(y_pred, 6))
 
-    # Store the new point
-    x.append(x4)
-    y.append(y4_final)
+# -----------------------
+# Corrector
+# -----------------------
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y
-})
+f4 = f(x4, y_pred)
 
-print(df)
+y_corr = y[2] + (h/3) * (f2 + 4*f3 + f4)
 
-# Plot the result
-plt.figure(figsize=(8, 5))
-plt.plot(x, y, marker='o')
+print("Corrected Value =", round(y_corr, 6))
+
+# -----------------------
+# Add New Point
+# -----------------------
+
+x.append(x4)
+y.append(y_corr)
+
+# -----------------------
+# Graph
+# -----------------------
+
+plt.plot(x, y, marker="o", label="Milne Solution")
+
+plt.scatter(x4, y_corr,
+            color="red",
+            s=100,
+            label="Predicted/Corrected Point")
+
 plt.xlabel("x")
 plt.ylabel("y")
 plt.title("Milne's Predictor-Corrector Method")
 plt.grid(True)
+plt.legend()
+
 plt.show()
