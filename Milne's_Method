@@ -1,0 +1,59 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Differential Equation: dy/dx = x + y
+def f(x, y):
+    return x + y
+
+# Step size
+h = 0.1
+
+# Initial 4 known points (from RK4 or given in the question)
+x = [0.0, 0.1, 0.2, 0.3]
+y = [1.0000, 1.1103, 1.2428, 1.3997]
+
+# Number of new points to calculate
+steps = 5
+
+for i in range(steps):
+
+    n = len(x) - 1   # index of last known value
+
+    x0, y0 = x[n-3], y[n-3]
+    x1, y1 = x[n-2], y[n-2]
+    x2, y2 = x[n-1], y[n-1]
+    x3, y3 = x[n],   y[n]
+
+    f0 = f(x0, y0)
+    f1 = f(x1, y1)
+    f2 = f(x2, y2)
+    f3 = f(x3, y3)
+
+    x4 = x3 + h   # next x value
+
+    y4_guess = y0 + (4*h/3) * (2*f1 - f2 + 2*f3)
+
+    f4_guess = f(x4, y4_guess)
+
+    y4_final = y2 + (h/3) * (f2 + 4*f3 + f4_guess)
+
+    # Store the new point
+    x.append(x4)
+    y.append(y4_final)
+
+df = pd.DataFrame({
+    "x": x,
+    "y": y
+})
+
+print(df)
+
+# Plot the result
+plt.figure(figsize=(8, 5))
+plt.plot(x, y, marker='o')
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Milne's Predictor-Corrector Method")
+plt.grid(True)
+plt.show()
